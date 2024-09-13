@@ -15,6 +15,9 @@
     <h2>Attacker IP</h2>
     <textarea id="location" readonly rows="13" cols="70"></textarea>
 
+    <h2>credentials used</h2>
+    <textarea id="creds" readonly rows="10" cols="50"></textarea>
+
     <script>
         function fetchAndUpdate(url, textId) {
             fetch(url)
@@ -42,6 +45,7 @@
         
         fetchAndUpdate("{{ url_for('ssh') }}", "logs");
         fetchAndUpdate("{{ url_for('iplocation') }}", "location");
+        fetchAndUpdate("{{ url_for('ssh_creds') }}", "creds")
     </script>
 </body>
 </html>

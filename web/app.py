@@ -39,5 +39,19 @@ def iplocation():
     return app.response_class(generate(), mimetype="text/plain")
 
 
+@app.route("/creds")
+def ssh_creds():
+    def generate():
+        with open("../ssh/ssh_logs/tries.log", "r") as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    sleep(0.1)
+                    continue
+                yield line
+
+    return app.response_class(generate(), mimetype="text/plain")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
