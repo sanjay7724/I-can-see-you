@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+    
+    <title>Honeypot dashboard</title>
+</head>
+<body>
+    <h1>SSH Logs</h1>
+    <pre id="output"></pre>
+<script>
+    var output = document.getElementById('output');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '{{ url_for("ssh") }}');
+    xhr.send();
+
+    setInterval(function() {
+        output.textContent = xhr.responseText;
+    }, 1000);
+</script>
+</body>
