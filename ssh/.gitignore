@@ -1,3 +1,4 @@
 key
 key.pub
 ssh_logs
+.env

@@ -3,8 +3,11 @@ import paramiko
 import threading
 import logging
 import os
+import dotenv
+import requests
 
 logging.basicConfig(filename='ssh_logs/ssh.log',level=logging.INFO)
+#dotenv()
 
 ip_logger = logging.getLogger('ip_logger')
 ip_handler = logging.FileHandler('ssh_logs/clients_ip.log')
@@ -13,19 +16,31 @@ ip_logger.setLevel(logging.INFO)
 
 class SSHServer(paramiko.ServerInterface):
     def check_auth_password(self,username,password):
+        # u = os.getenv('USER')
+        # p = os.getenv('PASSWORD')
         tries = f"{username}:{password}"
         os.system(f"echo {tries} >> ssh_logs/tries.log")
         print(tries)
         logging.info(tries)
         return paramiko.AUTH_FAILED
+    
+def get_ip_location(client_addr):
+    response = requests.get(f"http://ipinfo.io/{client_addr}/json")
+    if response.status_code == 200:
+        data = response.json()
+        return data
+    return "Unknown"
 
 def handle_conn(client_sock,client_addr):
     ip_logger.info(client_addr)
+    ip_info = get_ip_location(client_addr[0])
+    ip_logger.info(f"Connection from {client_addr[0]} ({ip_info})")
     transport = paramiko.Transport(client_sock)
     server_key = paramiko.RSAKey.from_private_key_file('key')
     transport.add_server_key(server_key)
     ssh = SSHServer()
     transport.start_server(server=ssh)
+
 
 def main():
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
