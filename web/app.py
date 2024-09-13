@@ -1,26 +1,43 @@
 from flask import Flask, render_template
 from time import sleep
-import subprocess
+
 app = Flask(__name__)
 
-@app.route('/')
+
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route('/ssh')
+
+@app.route("/ssh")
 def ssh():
-    #log = os.system("cat ../ssh/ssh_logs/ssh.log")
-    # log = subprocess.Popen(['cat','../ssh/ssh_logs/ssh.log'],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    # print(log)
-    # stdout,stderr = log.communicate()
 
-    # return str(stdout.decode('utf-8'))
-    def display():
-        with open ('../ssh/ssh_logs/ssh.log') as f:
+    def generate():
+        with open("../ssh/ssh_logs/ssh.log", "r") as f:
             while True:
-                yield f.read()
-                sleep(1)
-    return app.response_class(display(),mimetype='text/plain')
+                line = f.readline()
+                if not line:
+                    sleep(0.1)  # Sleep briefly before trying to read more
+                    continue
+                yield line
 
-if __name__ =='__main__':
+    return app.response_class(generate(), mimetype="text/plain")
+
+
+@app.route("/iplocation")
+def iplocation():
+
+    def generate():
+        with open("../ssh/ssh_logs/clients_ip.log", "r") as f:
+            while True:
+                line = f.readline()
+                if not line:
+                    sleep(0.1)  # Sleep briefly before trying to read more
+                    continue
+                yield line
+
+    return app.response_class(generate(), mimetype="text/plain")
+
+
+if __name__ == "__main__":
     app.run(debug=True)

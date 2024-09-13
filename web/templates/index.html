@@ -1,19 +1,47 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honeypot Dashboard</title>
     
-    <title>Honeypot dashboard</title>
 </head>
 <body>
-    <h1>SSH Logs</h1>
-    <pre id="output"></pre>
-<script>
-    var output = document.getElementById('output');
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '{{ url_for("ssh") }}');
-    xhr.send();
+    <header><h1>Welcome admin</h1></header>
 
-    setInterval(function() {
-        output.textContent = xhr.responseText;
-    }, 1000);
-</script>
+    <h2>SSH Logs</h2>
+    <textarea id="logs" readonly rows="13" cols="70"></textarea><br>
+
+    <h2>Attacker IP</h2>
+    <textarea id="location" readonly rows="13" cols="70"></textarea>
+
+    <script>
+        function fetchAndUpdate(url, textId) {
+            fetch(url)
+                .then(response => {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    const textarea = document.getElementById(textId);
+                    
+                    function readStream() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) return;
+                            const text = decoder.decode(value, { stream: true });
+                            textarea.value += text;
+                            textarea.scrollTop = textarea.scrollHeight; // Auto-scroll
+
+                            readStream(); // Continue reading
+                        });
+                    }
+                    
+                    readStream(); // Start reading
+                })
+                .catch(error => console.error('Fetch error:', error));
+        }
+
+        
+        fetchAndUpdate("{{ url_for('ssh') }}", "logs");
+        fetchAndUpdate("{{ url_for('iplocation') }}", "location");
+    </script>
 </body>
+</html>
