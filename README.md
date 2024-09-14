@@ -3,7 +3,7 @@ A Honeypot in python with a web based dashboard made with flask to get live upda
 
 ## ToDo
 1) Add different services like ftp, etc and monitor
-2) log commands executed by attacker
+2) log commands executed by attacker during the active session
 3) improve UI
 
 ## How to run
