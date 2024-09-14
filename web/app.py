@@ -13,7 +13,7 @@ def index():
 def ssh():
 
     def generate():
-        with open("../ssh/ssh_logs/ssh.log", "r") as f:
+        with open("ssh/ssh_logs/ssh.log", "r") as f:
             while True:
                 line = f.readline()
                 if not line:
@@ -28,7 +28,7 @@ def ssh():
 def iplocation():
 
     def generate():
-        with open("../ssh/ssh_logs/clients_ip.log", "r") as f:
+        with open("ssh/ssh_logs/clients_ip.log", "r") as f:
             while True:
                 line = f.readline()
                 if not line:
@@ -42,7 +42,7 @@ def iplocation():
 @app.route("/creds")
 def ssh_creds():
     def generate():
-        with open("../ssh/ssh_logs/tries.log", "r") as f:
+        with open("ssh/ssh_logs/tries.log", "r") as f:
             while True:
                 line = f.readline()
                 if not line:
@@ -54,4 +54,4 @@ def ssh_creds():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

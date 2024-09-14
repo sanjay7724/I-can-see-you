@@ -1,0 +1,5 @@
+venv
+/ssh/key
+/ssh/key.pub
+/ssh/ssh_logs
+.env
