@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Honeypot Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
 </head>
 <body>
@@ -14,9 +15,11 @@
 
     <h2>Attacker IP</h2>
     <textarea id="location" readonly rows="13" cols="70"></textarea>
-
-    <h2>credentials used</h2>
-    <textarea id="creds" readonly rows="10" cols="50"></textarea>
+    <div class="creds">
+        <h2>credentials used</h2>
+        <textarea id="creds" readonly rows="10" cols="50"></textarea>
+    </div>
+    
 
     <script>
         function fetchAndUpdate(url, textId) {
